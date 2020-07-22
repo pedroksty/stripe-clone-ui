@@ -41,7 +41,12 @@ export function DropdownRoot() {
 
 
   return (
-    <div className="dropdown-root">
+    <motion.div
+      className="dropdown-root"
+      animate={{
+        opacity: isActive ? 1 : 0
+      }}
+    >
       <motion.div className="dropdown-container"
         animate={{
           x,
@@ -68,8 +73,39 @@ export function DropdownRoot() {
         >
           {options.map(item => <DropdownSection key={item.id} option={item} />)}
         </motion.div>
+
       </motion.div>
-    </div>
+      <DropdownArrow isFirstInteraction={isFirstInteraction} />
+    </motion.div>
   )
 }
 
+function DropdownArrow({ isFirstInteraction }) {
+  const { cachedId, getOptionById } = useContext(Context)
+
+  const cachedOption = useMemo(() => getOptionById(cachedId), [cachedId, getOptionById])
+
+  const x = cachedOption ? cachedOption.optionCenterX : 0;
+
+
+
+  return (
+    <motion.div
+      className="dropdown-arrow"
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        x,
+        pointerEvents: 'none',
+        opacity: x > 0 ? 1 : 0
+      }}
+      transition={{
+        ease: "easeOut",
+        x: { duration: isFirstInteraction ? 0 : refDuration }
+      }}
+
+    />
+
+  )
+}
