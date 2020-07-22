@@ -41,42 +41,51 @@ export function DropdownRoot() {
 
 
   return (
-    <motion.div
-      className="dropdown-root"
-      animate={{
-        opacity: isActive ? 1 : 0
-      }}
-    >
-      <motion.div className="dropdown-container"
+    <div style={{ perspective: 2000 }} >
+      <motion.div
+        className="dropdown-root"
         animate={{
-          x,
-          width,
-          height,
-          pointerEvents: isActive ? 'unset' : 'none'
-        }}
-        transition={{
-          ease: 'easeOut',
-          x: isFirstInteraction ? { duration: 0 } : refDuration,
-          width: { duration: isFirstInteraction ? 0 : refDuration * 0.93 },
-          height: { duration: isFirstInteraction ? 0 : refDuration * 0.93 },
-          pointerEvents: { delay: 0.05 }
+          opacity: isActive ? 1 : 0,
+          rotateX: isActive ? 0 : -15
+
         }}
 
-        onHoverStart={() => setHovering(true)}
-        onHoverEnd={() => setHovering(false)}
+        transition={{
+          opacity: { duration: refDuration, delay: 0.05 },
+          rotateX: { duration: refDuration, delay: 0.05 },
+        }}
       >
-        <motion.div
+        <motion.div className="dropdown-container"
           animate={{
-            x: -x
+            x,
+            width,
+            height,
+            pointerEvents: isActive ? 'unset' : 'none'
+          }}
+          transition={{
+            ease: 'easeOut',
+            x: isFirstInteraction ? { duration: 0 } : refDuration,
+            width: { duration: isFirstInteraction ? 0 : refDuration * 0.93 },
+            height: { duration: isFirstInteraction ? 0 : refDuration * 0.93 },
+            pointerEvents: { delay: 0.05 }
           }}
 
+          onHoverStart={() => setHovering(true)}
+          onHoverEnd={() => setHovering(false)}
         >
-          {options.map(item => <DropdownSection key={item.id} option={item} />)}
-        </motion.div>
+          <motion.div
+            animate={{
+              x: -x
+            }}
 
+          >
+            {options.map(item => <DropdownSection key={item.id} option={item} />)}
+          </motion.div>
+
+        </motion.div>
+        <DropdownArrow isFirstInteraction={isFirstInteraction} />
       </motion.div>
-      <DropdownArrow isFirstInteraction={isFirstInteraction} />
-    </motion.div>
+    </div>
   )
 }
 
